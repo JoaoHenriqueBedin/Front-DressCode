@@ -1,45 +1,31 @@
-export default async function RegisterRequest({
-  Nome,
-  Email,
-  Senha,
-  CPF_CNPJ,
-  Telefone,
-  Tipo,
-}: {
-  Nome: string;
-  Email: string;
-  Senha: string;
-  CPF_CNPJ: string;
-  Telefone: string;
-  Tipo: string;
-}) {
+export interface UserRegister {
+  Nome: string
+  Email: string
+  Senha: string
+  CPF_CNPJ: string
+  Telefone: string
+  Tipo: string
+}
+
+export default async function RegisterRequest(user: UserRegister) {
   try {
-    const body = {
-      Nome,
-      Email,
-      Senha,
-      CPF_CNPJ,
-      Telefone,
-      Tipo,
+    if (!user) {
+      throw new Error('User data is required')
     }
 
-    const res = await fetch('http://localhost:3000/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
+    const res = await fetch(
+      'https://17b2-143-208-41-236.ngrok-free.app/api/auth/register',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      }
+    )
 
-    if (!res.ok) {
-      throw new Error('Erro ao fazer cadastro')
-    }
-
-    const data = await res.json()
-
-    return data
+    return res
   } catch (error) {
     console.error(error)
-    throw error // Para propagar o erro e lidar com ele no componente
   }
 }

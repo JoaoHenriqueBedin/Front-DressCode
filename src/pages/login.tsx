@@ -9,8 +9,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useUserStore } from '@/store/user'
+import { DefaultResponse } from '@/types'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function LoginPage() {
@@ -19,6 +22,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
+  const { setUser } = useUserStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,14 +30,23 @@ export default function LoginPage() {
 
     try {
       if (!email || !password) {
-        alert('Por favor, preencha todos os campos!')
+        toast.error('Preencha todos os campos.', {
+          id: 'login',
+        })
 
         return
       }
 
       const res = await LoginRequest(email, password)
+      const data: DefaultResponse = await res?.json()
 
-      console.log(res)
+      if (!res || !res.ok) {
+        toast.error(data.message ?? 'Ocorreu um erro ao fazer login', {
+          id: 'login',
+        })
+
+        return
+      }
 
       navigate('/home')
     } catch (error) {
