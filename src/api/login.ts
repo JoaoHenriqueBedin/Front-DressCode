@@ -1,27 +1,26 @@
-export default async function LoginRequest(email: string, password: string) {
+export default async function LoginRequest(
+  email: string,
+  password: string
+): Promise<Response | undefined> {
   try {
     const body = {
       Email: email,
       Senha: password,
     }
 
-    const res = await fetch('http://localhost:3000/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
+    const res = await fetch(
+      'https://17b2-143-208-41-236.ngrok-free.app/api/auth/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      }
+    )
 
-    if (!res.ok) {
-      throw new Error('Erro ao fazer login')
-    }
-
-    const data = await res.json()
-
-    return data
+    return res
   } catch (error) {
-    console.error(error)
-    throw error // Para propagar o erro e lidar com ele no componente
+    console.log(error)
   }
 }

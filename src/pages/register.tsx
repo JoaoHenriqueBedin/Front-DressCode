@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import RegisterRequest from '@/api/register'; // Ajuste o caminho conforme necessário
-import { Button } from '@/components/ui/button';
+import RegisterRequest from '@/api/register' // Ajuste o caminho conforme necessário
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -8,30 +7,36 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Loader2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { useUserStore } from '@/store/user'
+import { RegisterResponse } from '@/types'
+import { Loader2 } from 'lucide-react'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function RegisterPage() {
-  const [Nome, setNome] = useState('');
-  const [Email, setEmail] = useState('');
-  const [Senha, setSenha] = useState('');
-  const [CPF_CNPJ, setCPFCNPJ] = useState('');
-  const [Telefone, setTelefone] = useState('');
-  const [Tipo, setTipo] = useState('Estilista');
-  const [loading, setLoading] = useState(false);
+  const [Nome, setNome] = useState('')
+  const [Email, setEmail] = useState('')
+  const [Senha, setSenha] = useState('')
+  const [CPF_CNPJ, setCPFCNPJ] = useState('')
+  const [Telefone, setTelefone] = useState('')
+  const [Tipo, setTipo] = useState('Estilista')
+  const [loading, setLoading] = useState(false)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { setUser } = useUserStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
 
     try {
       if (!Nome || !Email || !Senha || !CPF_CNPJ || !Telefone || !Tipo) {
-        alert('Por favor, preencha todos os campos!');
-        return;
+        toast.error('Por favor, preencha todos os campos!')
+
+        return
       }
 
       const res = await RegisterRequest({
@@ -41,17 +46,23 @@ export default function RegisterPage() {
         CPF_CNPJ,
         Telefone,
         Tipo,
-      });
+      })
+      const data: RegisterResponse = await res?.json()
 
-      console.log(res);
+      if (!res || !res.ok) {
+        toast.error(data.message ?? 'Ocorreu um erro ao fazer o cadastro')
 
-      navigate('/login'); // Redireciona para a página de login após o cadastro
+        return
+      }
+
+      setUser(data.usuario)
+      navigate('/home') // Redireciona para a página de login após o cadastro
     } catch (error) {
-      console.error(error);
+      console.error(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className='w-full h-screen flex justify-center items-center bg-neutral-100'>
@@ -59,7 +70,9 @@ export default function RegisterPage() {
         <CardHeader className='text-center'>
           <CardTitle>Registrar</CardTitle>
 
-          <CardDescription>Preencha os campos para criar uma conta.</CardDescription>
+          <CardDescription>
+            Preencha os campos para criar uma conta.
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -172,5 +185,5 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }
