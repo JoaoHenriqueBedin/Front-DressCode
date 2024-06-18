@@ -50,7 +50,7 @@ export default function RegisterPage() {
       const data: RegisterResponse = await res?.json()
 
       if (!res || !res.ok) {
-        toast.error(data.message ?? 'Ocorreu um erro ao fazer o cadastro')
+        toast.error(data?.message ?? 'Ocorreu um erro ao fazer o cadastro')
 
         return
       }
