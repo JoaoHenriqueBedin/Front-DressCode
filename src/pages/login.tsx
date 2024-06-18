@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { useUserStore } from '@/store/user'
-import { DefaultResponse } from '@/types'
+import { LoginResponse } from '@/types'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -19,14 +19,14 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
   const { setUser } = useUserStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    setIsLoading(true)
 
     try {
       if (!email || !password) {
@@ -38,21 +38,22 @@ export default function LoginPage() {
       }
 
       const res = await LoginRequest(email, password)
-      const data: DefaultResponse = await res?.json()
+      const data: LoginResponse = await res?.json()
 
       if (!res || !res.ok) {
-        toast.error(data.message ?? 'Ocorreu um erro ao fazer login', {
+        toast.error(data?.message ?? 'Ocorreu um erro ao fazer login', {
           id: 'login',
         })
 
         return
       }
 
+      setUser(data.usuario)
       navigate('/home')
     } catch (error) {
       console.error(error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -94,8 +95,8 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button className='!mt-8' type='submit' disabled={loading}>
-              {loading && <Loader2 className='animate-spin mr-2' size={16} />}
+            <Button className='!mt-8' type='submit' disabled={isLoading}>
+              {isLoading && <Loader2 className='animate-spin mr-2' size={16} />}
               Entrar
             </Button>
           </form>

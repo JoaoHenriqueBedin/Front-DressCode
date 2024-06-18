@@ -39,3 +39,8 @@ export interface DefaultResponse {
 export interface RegisterResponse extends DefaultResponse {
   usuario: User
 }
+
+export interface LoginResponse extends DefaultResponse {
+  usuario: User
+  token: string
+}
