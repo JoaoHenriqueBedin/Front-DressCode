@@ -1,15 +1,25 @@
+export interface Portifolio {
+  PortifolioID: number
+  EstilistaID: number | null
+  AtelieID: number | null
+  Descricao_portifolio: string | null
+  Tempo_experiencia: string | null
+}
+
 export interface Atelie {
   AtelieID: number
   Nome: string
   UsuarioID: number
   VerificacaoDocumentos: string
+  portifolios: Portifolio[]
 }
 
-export interface Estilistum {
+export interface Estilista {
   EstilistaID: number
   Nome: string
   UsuarioID: number
   VerificacaoDocumentos: string
+  portifolios: Portifolio[]
 }
 
 export interface Perfil {
@@ -27,9 +37,17 @@ export interface User {
   Telefone: string
   Senha: string
   Tipo: 'Atelie' | 'Estilista'
-  Atelie: Atelie | null
-  Estilistum: Estilistum | null
-  Perfil: Perfil | null
+  atelie: Atelie | null
+  estilista: Estilista | null
+  perfil: Perfil | null
+}
+
+export interface Schedule {
+  AgendamentoID: number
+  DataHora: string
+  EstilistaID: number
+  AtelieID: number
+  Status: string
 }
 
 export interface DefaultResponse {

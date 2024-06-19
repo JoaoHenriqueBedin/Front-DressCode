@@ -8,7 +8,7 @@ export default async function EditProfile(user: User) {
     }
 
     const res = await fetch(
-      `https://b12a-143-208-41-236.ngrok-free.app/api/usuarios/${user.UsuarioID}`,
+      `https://301a-143-208-41-236.ngrok-free.app/api/usuarios/${user.UsuarioID}`,
       {
         method: 'PUT',
         headers: {

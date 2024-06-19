@@ -1,7 +1,7 @@
-export default async function GetUsuarios(tipo: 'Estilista' | 'Atelie') {
+export default async function GetProfile(userId: number) {
   try {
     const res = await fetch(
-      `https://301a-143-208-41-236.ngrok-free.app/api/usuarios/search/${tipo}`,
+      `https://301a-143-208-41-236.ngrok-free.app/api/usuarios/${userId}`,
       {
         method: 'GET',
         headers: {
