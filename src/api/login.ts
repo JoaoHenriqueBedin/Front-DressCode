@@ -9,7 +9,7 @@ export default async function LoginRequest(
     }
 
     const res = await fetch(
-      'https://b12a-143-208-41-236.ngrok-free.app/api/auth/login',
+      'https://301a-143-208-41-236.ngrok-free.app/api/auth/login',
       {
         method: 'POST',
         headers: {

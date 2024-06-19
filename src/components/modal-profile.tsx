@@ -1,6 +1,7 @@
 import EditUser from '@/api/edit-user'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -46,7 +47,7 @@ export default function ModalProfile({ open, openChange }: ModalProfileProps) {
         return
       }
 
-      if (userProfile.Perfil?.Biografia !== user?.Perfil?.Biografia) {
+      if (userProfile.perfil?.Biografia !== user?.perfil?.Biografia) {
         const resProfile = await EditProfile(userProfile)
 
         const dataProfile: DefaultResponse = await resProfile?.json()
@@ -69,17 +70,19 @@ export default function ModalProfile({ open, openChange }: ModalProfileProps) {
     }
   }
 
-  const handleCancel = () => {
-    openChange(false)
-    setUserProfile(user)
-  }
-
   if (!userProfile) {
     return null
   }
 
   return (
-    <Dialog modal open={open} onOpenChange={openChange}>
+    <Dialog
+      modal
+      open={open}
+      onOpenChange={() => {
+        openChange(false)
+        setUserProfile(user)
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Meu Perfil</DialogTitle>
@@ -87,7 +90,7 @@ export default function ModalProfile({ open, openChange }: ModalProfileProps) {
 
         <div className='flex space-x-4'>
           <Avatar className='size-20'>
-            <AvatarImage src={userProfile.Perfil?.FotoPerfil ?? ''} />
+            <AvatarImage src={userProfile.perfil?.FotoPerfil ?? ''} />
 
             <AvatarFallback className='bg-neutral-200'>
               {userProfile.Nome[0].toUpperCase() ?? (
@@ -134,12 +137,12 @@ export default function ModalProfile({ open, openChange }: ModalProfileProps) {
               <p className='text-sm font-semibold'>Biografia</p>
 
               <Textarea
-                value={userProfile.Perfil?.Biografia ?? ''}
+                value={userProfile.perfil?.Biografia ?? ''}
                 onChange={(e) =>
                   setUserProfile({
                     ...userProfile,
-                    Perfil: {
-                      ...userProfile.Perfil!,
+                    perfil: {
+                      ...userProfile.perfil!,
                       Biografia: e.target.value,
                     },
                   })
@@ -151,16 +154,14 @@ export default function ModalProfile({ open, openChange }: ModalProfileProps) {
         </div>
 
         <DialogFooter>
-          <Button
-            variant={'outline'}
-            onClick={handleCancel}
-            disabled={isLoading}
-          >
-            {isLoading && <Loader2 className='animate-spin mr-2' size={16} />}
-            Cancelar
-          </Button>
+          <DialogClose asChild>
+            <Button variant={'outline'}>Cancelar</Button>
+          </DialogClose>
 
-          <Button onClick={handleSave}>Salvar</Button>
+          <Button disabled={isLoading} onClick={handleSave}>
+            {isLoading && <Loader2 className='animate-spin mr-2' size={16} />}
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

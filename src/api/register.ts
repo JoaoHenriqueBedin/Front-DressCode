@@ -14,7 +14,7 @@ export default async function RegisterRequest(user: UserRegister) {
     }
 
     const res = await fetch(
-      'https://b12a-143-208-41-236.ngrok-free.app/api/auth/register',
+      'https://301a-143-208-41-236.ngrok-free.app/api/auth/register',
       {
         method: 'POST',
         headers: {

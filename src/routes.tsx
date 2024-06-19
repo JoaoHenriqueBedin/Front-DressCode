@@ -3,6 +3,7 @@ import LoginPage from '@/pages/login'
 import RegisterPage from './pages/register'
 import SchedulesPage from './pages/schedules'
 import HomePage from './pages/home'
+import ProfilePage from './pages/profile'
 
 const router = createBrowserRouter([
   {
@@ -11,7 +12,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/home',
-    // @ts-expect-error
     element: <HomePage />,
   },
   {
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/schedules',
     element: <SchedulesPage />,
+  },
+  {
+    path: '/profile/:id',
+    element: <ProfilePage />,
   },
 ])
 
